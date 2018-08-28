@@ -28,8 +28,10 @@ mirroring:
 
   function mirroring() {
     git status
-    git remote add -f mirror "$MIRROR_GIT"
-    git push -u mirror "$CI_COMMIT_REF_NAME"
+    git remote rm mirror  &> /dev/null
+    git remote add mirror "$MIRROR_GIT"
+    git checkout -b "$CI_COMMIT_REF_NAME" &> /dev/null
+    git push -u mirror HEAD:"$CI_COMMIT_REF_NAME"
   }
 
 before_script:
