@@ -29,7 +29,7 @@ mirroring:
   function mirroring() {
     git status
     git remote add -f mirror "$MIRROR_GIT"
-    git push -u mirror "$CI_COMMIT_REF_NAME"
+    git push mirror "$CI_COMMIT_REF_NAME"
   }
 
 before_script:
