@@ -1,0 +1,34 @@
+image: alpine:latest
+
+variables:
+
+  MIRROR_GIT: git@github.com:funkyproject/test-mirroring.git
+  MIRROR_DOMAIN: github.com
+
+mirroring:
+  allow_failure: false
+  script:
+  - prepare
+  - mirroring
+
+.mirroring: &mirroring |
+  # Mirroring variables and functions
+  [[ "$TRACE" ]] && set -x
+
+  function install_dependencies() {
+    apk add -U openssl curl tar gzip bash ca-certificates git
+    which ssh-agent || apk add -U openssh-client -y
+    eval $(ssh-agent -s)
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+    echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    ssh-keyscan "$MIRROR_DOMAIN" >> ~/.ssh/known_hosts
+    chmod 644 ~/.ssh/known_hosts
+  }
+
+  function mirroring() {
+    git status
+  }
+
+before_script:
+- *mirroring
