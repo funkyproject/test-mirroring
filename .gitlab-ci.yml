@@ -8,7 +8,7 @@ variables:
 mirroring:
   allow_failure: false
   script:
-  - prepare
+  - install_dependencies
   - mirroring
 
 .mirroring: &mirroring |
@@ -28,6 +28,8 @@ mirroring:
 
   function mirroring() {
     git status
+    git remote add -f mirror "$MIRROR_GIT"
+    git push -u mirror "$CI_COMMIT_REF_NAME"
   }
 
 before_script:
