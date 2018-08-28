@@ -30,7 +30,7 @@ mirroring:
     git status
     git remote rm mirror  &> /dev/null
     git remote add mirror "$MIRROR_GIT"
-    git push -u mirror "$CI_COMMIT_REF_NAME"
+    git push -u mirror HEAD:"$CI_COMMIT_REF_NAME"
   }
 
 before_script:
